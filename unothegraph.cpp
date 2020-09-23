@@ -19,12 +19,24 @@ using namespace std;
                                   cin >> dock;    \
 }while(0)
 
-class graph
+class Graph
 {
 public:
-    void BFS()
+    void BFS(int n, vector<vector<int>>& e)
     {
+        vector<vector<pair<int, int>>> g(n);
 
+        // covert edge to adjacency list
+        for (auto ei : e)
+        {
+            g[ei[0]].push_back({ei[1], ei[2]});
+            g[ei[1]].push_back({ei[0], ei[2]});
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            
+        }
     }
 
     void DFS()
@@ -32,7 +44,10 @@ public:
 
     }
 
-    
+    void prim()
+    {
+
+    }
 };
 
 class Solution
@@ -82,7 +97,38 @@ public:
 
 int main()
 {
+    // adjacency matrix
+    // vector<vector<int>> m;
+    /*
+            0   1   2   3   4   5
+        0   \   3   -1  2   -1  -1
+        1   
+        2
+        3
+        4
+        5
+    */
+
+    // adjacency list
+    // vector<vector<pair<int, int>>> g; 
+    /*
+        {
+          0:  {<1, 3>, <3, 4>, <5, 2>}
+          1:  {<0, 3>, <2, 1>}
+          2:  ...
+          .
+          .
+        }
+    */
+
+    // edge list
+    vector<vector<int>> e = {{0, 1, 4}, {}, {}};
+
+
+    Graph graph;
     Solution solu;
+
+    graph.BFS(n, e);
 
     // 997. Find the Town Judge
     vector<vector<int>> trust = { {1,3}, {1,4}, {2,3}, {2,4}, {4,3} };
