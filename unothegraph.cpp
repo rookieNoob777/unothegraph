@@ -25,6 +25,8 @@ public:
     void BFS(int n, vector<vector<int>>& e)
     {
         vector<vector<pair<int, int>>> g(n);
+        queue<int> v;
+        vector<int> seen(n, 0);
 
         // covert edge to adjacency list
         for (auto ei : e)
@@ -33,15 +35,37 @@ public:
             g[ei[1]].push_back({ei[0], ei[2]});
         }
 
+        cout << "BFS: ";
+
         for (int i = 0; i < n; i++)
         {
-            
+            if (!seen[i])
+            {
+                v.push(i);
+
+                while (v.size())
+                {
+                    int vi = v.front();
+                    v.pop();
+
+                    seen[vi]++;
+                    cout << vi << " ";
+
+                    for (auto vw : g[vi])
+                    {
+                        if (!seen[vw.first])
+                            v.push(vw.first);
+                    }
+                }
+            }
         }
+
+        cout << endl;
     }
 
-    void DFS()
+    void DFS(int n, vector<vector<int>>& e)
     {
-
+        
     }
 
     void prim()
@@ -122,17 +146,19 @@ int main()
     */
 
     // edge list
-    vector<vector<int>> e = {{0, 1, 4}, {}, {}};
+    vector<vector<int>> e = {{0, 1, 4}, {1, 2, 2}, {1, 3, 2}, {2, 4, 1}, {2, 6, 2}, {3, 5, 3}};
 
 
     Graph graph;
     Solution solu;
 
-    graph.BFS(n, e);
+    graph.BFS(7, e);
+    graph.DFS(7, e);
+
 
     // 997. Find the Town Judge
-    vector<vector<int>> trust = { {1,3}, {1,4}, {2,3}, {2,4}, {4,3} };
-    cout << "The label of the Town Judge is: " << solu.findJudge(4, trust) << endl << endl;
+    // vector<vector<int>> trust = { {1,3}, {1,4}, {2,3}, {2,4}, {4,3} };
+    // cout << "The label of the Town Judge is: " << solu.findJudge(4, trust) << endl << endl;
 
     DOCK();
 
