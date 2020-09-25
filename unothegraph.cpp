@@ -37,25 +37,25 @@ public:
 
         cout << "BFS: ";
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; ++i)
         {
-            if (!seen[i])
+            if (seen[i])
+                continue;
+
+            v.push(i);
+
+            while (v.size())
             {
-                v.push(i);
+                int vi = v.front();
+                v.pop();
 
-                while (v.size())
+                seen[vi]++;
+                cout << vi << " ";
+
+                for (auto vw : g[vi])
                 {
-                    int vi = v.front();
-                    v.pop();
-
-                    seen[vi]++;
-                    cout << vi << " ";
-
-                    for (auto vw : g[vi])
-                    {
-                        if (!seen[vw.first])
-                            v.push(vw.first);
-                    }
+                    if (!seen[vw.first])
+                        v.push(vw.first);
                 }
             }
         }
@@ -65,12 +65,74 @@ public:
 
     void DFS(int n, vector<vector<int>>& e)
     {
-        
+        vector<vector<pair<int, int>>> g(n);
+        stack<int> v;
+        vector<int> seen(n, 0);
+
+        for (auto ei : e)
+        {
+            g[ei[0]].push_back({ei[1], ei[2]});
+            g[ei[1]].push_back({ei[0], ei[2]});
+        }
+
+        cout << "DFS: ";
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (seen[i])
+                continue;
+
+            v.push(i);
+
+            while (v.size())
+            {
+                int vi = v.top();
+                v.pop();
+
+                if (!seen[vi])
+                {
+                    cout << vi << " ";
+                }
+
+                seen[vi]++;
+
+                for (auto vw : g[vi])
+                {
+                    if (!seen[vw.first])
+                        v.push(vw.first);
+                }
+            }
+        }
+
+        cout << endl;
     }
 
-    void prim()
+    void prim(int n, vector<vector<int>>& e)
     {
+        vector<vector<pair<int, int>>> g(n);
 
+        for (auto ei : e)
+        {
+            g[ei[0]].push_back({ei[1], ei[2]});
+            g[ei[1]].push_back({ei[0], ei[2]});
+        }
+
+        priority_queue<pair<int, int>> q;
+        vector<int> seen(n, 0);
+        int min_cost = 0;
+
+        seen[0]++;
+        q.push({0, 0});
+
+        while (q.size())
+        {
+            int vi = q.top().second;
+        }
+
+
+
+        cout << endl;
+        cout << "Min cost: " << min_cost << endl;
     }
 };
 
@@ -154,7 +216,7 @@ int main()
 
     graph.BFS(7, e);
     graph.DFS(7, e);
-
+    graph.prim();
 
     // 997. Find the Town Judge
     // vector<vector<int>> trust = { {1,3}, {1,4}, {2,3}, {2,4}, {4,3} };
