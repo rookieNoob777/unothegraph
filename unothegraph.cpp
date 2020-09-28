@@ -49,8 +49,11 @@ public:
                 int vi = v.front();
                 v.pop();
 
-                seen[vi]++;
+                if (seen[vi])
+                    continue;
+
                 cout << vi << " ";
+                seen[vi]++;
 
                 for (auto vw : g[vi])
                 {
@@ -89,11 +92,10 @@ public:
                 int vi = v.top();
                 v.pop();
 
-                if (!seen[vi])
-                {
-                    cout << vi << " ";
-                }
+                if (seen[vi])
+                    continue;
 
+                cout << vi << " ";
                 seen[vi]++;
 
                 for (auto vw : g[vi])
@@ -107,9 +109,22 @@ public:
         cout << endl;
     }
 
-    void prim(int n, vector<vector<int>>& e)
+    void dfsr(vector<vector<pair<int, int>>>& g, int v, vector<int>& seen)
+    {
+        cout << v << " ";
+        seen[v]++;
+
+        for (auto vw : g[v])
+        {
+            if (!seen[vw.first])
+                dfsr(g, vw.first, seen);
+        }
+    }
+
+    void DFSR(int n, vector<vector<int>>& e)
     {
         vector<vector<pair<int, int>>> g(n);
+        vector<int> seen(n, 0);
 
         for (auto ei : e)
         {
@@ -117,22 +132,78 @@ public:
             g[ei[1]].push_back({ei[0], ei[2]});
         }
 
+        cout << "DFSR: ";
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (seen[i])
+                continue;
+
+            dfsr(g, i, seen);
+        }
+
+        cout << endl;
+    }
+
+    void prim(int n, vector<vector<int>>& e)
+    {
+        vector<vector<pair<int, int>>> g(n);
         priority_queue<pair<int, int>> q;
         vector<int> seen(n, 0);
         int min_cost = 0;
 
-        seen[0]++;
-        q.push({0, 0});
-
-        while (q.size())
+        for (auto ei : e)
         {
-            int vi = q.top().second;
+            g[ei[0]].push_back({ei[1], ei[2]});
+            g[ei[1]].push_back({ei[0], ei[2]});
         }
 
+        cout << "prim's: ";
 
+        for (int i = 0; i < n; ++i)
+        {
+            if (seen[i])
+                continue;
+
+            if (i > 0)
+                cout << endl <<
+                "New entry for disconnection graph: "
+                << i << endl;
+
+            q.push({0, i});
+
+            while (q.size())
+            {
+                int w = -q.top().first;
+                int vi = q.top().second;
+                q.pop();
+
+                if (seen[vi])
+                    continue;
+
+                cout << vi << " ";
+                seen[vi]++;
+                min_cost += w;
+                for (auto vw : g[vi])
+                {
+                    if (!seen[vw.first])
+                        q.push({-vw.second, vw.first});
+                }
+            }
+        }
 
         cout << endl;
-        cout << "Min cost: " << min_cost << endl;
+        cout << "Min cost of prim's: " << min_cost << endl;
+    }
+
+    void kruskal(int n, vector<vector<int>>& e)
+    {
+        priority_queue<vector<int>> q;
+        
+        for (auto ei : e)
+            q.push({ei[2], ei[0], ei[1]});
+
+        
     }
 };
 
@@ -208,15 +279,17 @@ int main()
     */
 
     // edge list
-    vector<vector<int>> e = {{0, 1, 4}, {1, 2, 2}, {1, 3, 2}, {2, 4, 1}, {2, 6, 2}, {3, 5, 3}};
-
+    // vector<vector<int>> e = {{0, 1, 4}, {1, 2, 2}, {1, 3, 2}, {2, 4, 1}, {2, 6, 2}, {3, 5, 3}};
+    vector<vector<int>> e = {{0, 1, 2}, {0, 2, 1}, {0, 3, 4}, {1, 2, 3}, {1, 3, 2}};
 
     Graph graph;
     Solution solu;
 
-    graph.BFS(7, e);
-    graph.DFS(7, e);
-    graph.prim();
+    graph.BFS(4, e);
+    graph.DFS(4, e);
+    graph.DFSR(4, e);
+    graph.prim(4, e);
+    graph.kruskal(4, e);
 
     // 997. Find the Town Judge
     // vector<vector<int>> trust = { {1,3}, {1,4}, {2,3}, {2,4}, {4,3} };
