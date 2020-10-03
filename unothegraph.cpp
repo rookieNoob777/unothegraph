@@ -196,14 +196,64 @@ public:
         cout << "Min cost of prim's: " << min_cost << endl;
     }
 
+    class DSU
+    {
+    private:
+        vector<int> v;
+    public:
+        DSU(int n)
+        {
+            v.resize(n, 0);
+            for (int i = 0; i < n; ++i)
+                v[i] = i;
+        }
+
+        int finds(int p)
+        {
+            if (v[p] != p)
+                v[p] = finds(v[p]);
+            return v[p];
+        };
+
+        void unions(int p, int q)
+        {
+            v[p] = finds(q);
+        };
+    };
+
     void kruskal(int n, vector<vector<int>>& e)
     {
         priority_queue<vector<int>> q;
-        
-        for (auto ei : e)
-            q.push({ei[2], ei[0], ei[1]});
+        int num_edge = 0;
+        int min_cost = 0;
+        DSU dsu(n);
 
-        
+        for (auto ei : e)
+            q.push({-ei[2], ei[0], ei[1]});
+
+        while (num_edge < n - 1)
+        {
+            if (q.empty())
+            {
+                cout << "Void Kruskal" << endl;
+                return;
+            }
+
+            int w = -q.top()[0]; 
+            int vp = q.top()[1];
+            int vq = q.top()[2];
+            q.pop();
+
+            if (dsu.finds(vp) == dsu.finds(vq))
+                continue;
+            
+            cout << vp << " " << vq << " ";
+            min_cost += w;
+            num_edge++;
+            dsu.unions(vp, vq);
+        }
+
+        cout << "Min cost of kruskal: " << min_cost << endl;
     }
 };
 
@@ -285,10 +335,10 @@ int main()
     Graph graph;
     Solution solu;
 
-    graph.BFS(4, e);
-    graph.DFS(4, e);
-    graph.DFSR(4, e);
-    graph.prim(4, e);
+    // graph.BFS(4, e);
+    // graph.DFS(4, e);
+    // graph.DFSR(4, e);
+    // graph.prim(4, e);
     graph.kruskal(4, e);
 
     // 997. Find the Town Judge
