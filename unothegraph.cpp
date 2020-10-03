@@ -14,10 +14,49 @@ using namespace std;
 
 #define BP (cout<<endl)
 
-#define DOCK() do{                       \
-                                  int dock;     \
-                                  cin >> dock;    \
+#define DOCK() do{  \
+    int dock;       \
+    cin >> dock;    \
 }while(0)
+
+template<typename T>
+void printContainer(vector<T> &container)
+{
+	for (auto it = container.begin(); it != container.end(); ++it)
+	{
+		cout << *it;
+		if (it != container.end() - 1)
+			cout << ", ";
+	}
+}
+
+// Disjoint-set union
+class DSU
+{
+private:
+    vector<int> v;
+public:
+    DSU(int n)
+    {
+        v.resize(n, 0);
+        for (int i = 0; i < n; ++i)
+            v[i] = i;
+    }
+
+    // find root and compress path, "quick find".
+    int finds(int p)
+    {
+        if (v[p] != p)
+            v[p] = finds(v[p]);
+        return v[p];
+    }
+
+    // corresponding to "quick find", this is "slow union"
+    void unions(int p, int q)
+    {
+        v[finds(q)] = finds(p);
+    }
+};
 
 class Graph
 {
@@ -196,31 +235,6 @@ public:
         cout << "Min cost of prim's: " << min_cost << endl;
     }
 
-    class DSU
-    {
-    private:
-        vector<int> v;
-    public:
-        DSU(int n)
-        {
-            v.resize(n, 0);
-            for (int i = 0; i < n; ++i)
-                v[i] = i;
-        }
-
-        int finds(int p)
-        {
-            if (v[p] != p)
-                v[p] = finds(v[p]);
-            return v[p];
-        };
-
-        void unions(int p, int q)
-        {
-            v[p] = finds(q);
-        };
-    };
-
     void kruskal(int n, vector<vector<int>>& e)
     {
         priority_queue<vector<int>> q;
@@ -247,12 +261,13 @@ public:
             if (dsu.finds(vp) == dsu.finds(vq))
                 continue;
             
-            cout << vp << " " << vq << " ";
+            cout << vp << " " << vq << ",";
             min_cost += w;
-            num_edge++;
             dsu.unions(vp, vq);
+            num_edge++;
         }
 
+        cout << endl;
         cout << "Min cost of kruskal: " << min_cost << endl;
     }
 };
@@ -300,6 +315,12 @@ public:
         return -1;
     }
 
+    // 1042. Flower Planting With No Adjacent
+    vector<int> gardenNoAdj(int N, vector<vector<int>>& paths)
+    {
+        vector<vector<int>>
+    }
+
 };
 
 int main()
@@ -339,11 +360,18 @@ int main()
     // graph.DFS(4, e);
     // graph.DFSR(4, e);
     // graph.prim(4, e);
-    graph.kruskal(4, e);
+    // graph.kruskal(4, e);
 
     // 997. Find the Town Judge
     // vector<vector<int>> trust = { {1,3}, {1,4}, {2,3}, {2,4}, {4,3} };
     // cout << "The label of the Town Judge is: " << solu.findJudge(4, trust) << endl << endl;
+
+    // 1042. Flower Planting With No Adjacent
+    int N = 3;
+    vector<vector<int>> paths = {{1,2}, {2,3}, {3,1}};
+    vector<int> GNA = solu.gardenNoAdj(N, paths);
+    printContainer(GNA);
+
 
     DOCK();
 
