@@ -318,7 +318,30 @@ public:
     // 1042. Flower Planting With No Adjacent
     vector<int> gardenNoAdj(int N, vector<vector<int>>& paths)
     {
-        vector<vector<int>>
+        vector<vector<int>> g(N);
+        vector<int> GNA(N, 0);
+
+        for (auto path : paths)
+        {
+            g[path[0]-1].push_back(path[1]-1);
+            g[path[1]-1].push_back(path[0]-1);
+        }
+
+        for (int i = 0; i < N; ++i)
+        {
+            vector<int> flowers = {INT_MAX, 1, 2, 3, 4};
+            for (auto ad : g[i])
+            {
+                // if (GNA[ad] == 0)
+                //     continue;
+                // remove(flowers.begin(), flowers.end(), GNA[ad]);
+                flowers[GNA[ad]] = INT_MAX;
+            }
+            // GNA[i] = flowers.front();
+            GNA[i] = *min_element(flowers.begin(), flowers.end());
+        }
+
+        return GNA;
     }
 
 };
@@ -372,6 +395,7 @@ int main()
     vector<int> GNA = solu.gardenNoAdj(N, paths);
     printContainer(GNA);
 
+    // 133. Clone Graph
 
     DOCK();
 
