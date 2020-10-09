@@ -272,6 +272,28 @@ public:
     }
 };
 
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+
 class Solution
 {
 public:
@@ -344,6 +366,80 @@ public:
         return GNA;
     }
 
+    // 133. Clone Graph
+    // Node* cloneGraph(Node* node)
+    // {
+    //     if (!node)
+    //         return node;
+
+    //     Node *cnode = nullptr;
+    //     queue<Node*> q;
+    //     unordered_map<int, Node*> hmap;
+    //     vector<int> seen(101, 0);
+
+    //     q.push(node);
+
+    //     while (q.size())
+    //     {
+    //         node = q.front();
+    //         q.pop();
+
+    //         if (seen[node->val]++)
+    //             continue;
+
+    //         Node* clone = nullptr;
+    //         auto it = hmap.find(node->val);
+    //         if (it == hmap.end())
+    //         {
+    //             clone = new Node(node->val);
+    //             hmap.insert({clone->val, clone});
+    //             if (clone->val == 1)
+    //                 cnode = clone;
+    //         }
+    //         else
+    //             clone = it->second;
+
+    //         for (auto nb : node->neighbors)
+    //         {
+    //             it = hmap.find(nb->val);
+    //             if (it == hmap.end())
+    //             {
+    //                 Node* cnb = new Node(nb->val);
+    //                 clone->neighbors.push_back(cnb);
+    //                 hmap.insert({cnb->val, cnb});
+    //             }
+    //             else
+    //                 clone->neighbors.push_back(it->second);
+
+    //             if (!seen[nb->val])
+    //                 q.push(nb);
+    //         }
+    //     }
+
+    //     return cnode;
+    // }
+
+    unordered_map<int, Node*> created;
+
+    Node* cloneGraph(Node* node)
+    {
+        if (!node)
+            return node;
+
+        Node* clone = nullptr;
+        auto it = created.find(node->val);
+        if (it == created.end())
+        {
+            clone = new Node(node->val);
+            created.insert({clone->val, clone});
+            for (auto nb : node->neighbors)
+                clone->neighbors.push_back(cloneGraph(nb));
+        }
+        else
+            clone = it->second;
+
+        return clone;
+    }
 };
 
 int main()
@@ -396,6 +492,7 @@ int main()
     printContainer(GNA);
 
     // 133. Clone Graph
+
 
     DOCK();
 
