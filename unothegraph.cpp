@@ -496,10 +496,10 @@ int main()
 	// cout << "The label of the Town Judge is: " << solu.findJudge(4, trust) << endl << endl;
 
 	// 1042. Flower Planting With No Adjacent
-	int N = 3;
-	vector<vector<int>> paths = {{1,2}, {2,3}, {3,1}};
-	vector<int> GNA = solu.gardenNoAdj(N, paths);
-	printContainer(GNA);
+	// int N = 3;
+	// vector<vector<int>> paths = {{1,2}, {2,3}, {3,1}};
+	// vector<int> GNA = solu.gardenNoAdj(N, paths);
+	// printContainer(GNA);
 
 	// 133. Clone Graph
 
